@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hbb/common.dart';
 import 'package:flutter_hbb/consts.dart';
+import 'package:flutter_hbb/mobile/pages/home_page.dart';
 import 'package:flutter_hbb/models/platform_model.dart';
 
 /// Brand header shown at the top of the desktop home screen (left pane).
@@ -100,6 +101,10 @@ class VorixaLanguageButton extends StatelessWidget {
 
   Future<void> _setLang(String code) async {
     await bind.mainSetLocalOption(key: kCommConfKeyLang, value: code);
+    if (isAndroid || isIOS) {
+      HomePage.homeKey.currentState?.refreshPages();
+      return;
+    }
     reloadAllWindows();
     bind.mainChangeLanguage(lang: code);
   }

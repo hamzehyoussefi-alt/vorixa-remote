@@ -4,6 +4,7 @@ import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hbb/common/formatter/id_formatter.dart';
 import 'package:flutter_hbb/common/widgets/connection_page_title.dart';
+import 'package:flutter_hbb/common/widgets/vorixa_brand.dart';
 import 'package:flutter_hbb/models/state_model.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -86,6 +87,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
             delegate: SliverChildListDelegate([
           if (!bind.isCustomClient() && !isIOS)
             Obx(() => _buildUpdateUI(stateGlobal.updateUrl.value)),
+          const VorixaBrandHeader(),
           _buildRemoteIDTextField(),
         ])),
         SliverFillRemaining(
@@ -154,8 +156,20 @@ class _ConnectionPageState extends State<ConnectionPage> {
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
         child: Ink(
           decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.all(Radius.circular(13)),
+            color: Theme.of(context).brightness == Brightness.dark
+                ? const Color(0xFF1B1E24)
+                : Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(18)),
+            border: Border.all(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white12
+                    : const Color(0x262286E2)),
+            boxShadow: const [
+              BoxShadow(
+                  color: Color(0x1F2286E2),
+                  blurRadius: 24,
+                  offset: Offset(0, 8))
+            ],
           ),
           child: Row(
             children: <Widget>[
