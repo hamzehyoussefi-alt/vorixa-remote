@@ -56,59 +56,11 @@ mod ml;
 mod gl;
 
 pub const LANGS: &[(&str, &str)] = &[
-    ("en", "English"),
-    ("it", "Italiano"),
-    ("fr", "Français"),
-    ("de", "Deutsch"),
-    ("nl", "Nederlands"),
-    ("nb", "Norsk bokmål"),
-    ("zh-cn", "简体中文"),
-    ("zh-tw", "繁體中文"),
-    ("pt-pt", "Português (Portugal)"),
-    ("pt-br", "Português (Brasil)"),
-    ("es", "Español"),
-    ("et", "Eesti keel"),
-    ("eu", "Euskara"),
-    ("hu", "Magyar"),
-    ("bg", "Български"),
-    ("be", "Беларуская"),
-    ("ru", "Русский"),
-    ("sk", "Slovenčina"),
-    ("id", "Indonesia"),
-    ("cs", "Čeština"),
-    ("da", "Dansk"),
-    ("eo", "Esperanto"),
-    ("tr", "Türkçe"),
-    ("vi", "Tiếng Việt"),
-    ("pl", "Polski"),
-    ("ja", "日本語"),
-    ("ko", "한국어"),
-    ("kz", "Қазақ"),
-    ("uk", "Українська"),
-    ("ur", "اردو"),
     ("fa", "فارسی"),
-    ("ca", "Català"),
-    ("gl", "Galego"),
-    ("el", "Ελληνικά"),
-    ("sv", "Svenska"),
-    ("sq", "Shqip"),
-    ("sr", "Srpski"),
-    ("th", "ภาษาไทย"),
-    ("sl", "Slovenščina"),
-    ("ro", "Română"),
-    ("lt", "Lietuvių"),
-    ("lv", "Latviešu"),
-    ("ar", "العربية"),
-    ("he", "עברית"),
-    ("hr", "Hrvatski"),
-    ("sc", "Sardu"),
-    ("ta", "தமிழ்"),
-    ("ge", "ქართული"),
-    ("fi", "Suomi"),
-    ("ml", "മലയാളം"),
-    ("hi", "हिंदी"),
-    ("gu", "ગુજરાતી"),
-    ("az", "Azərbaycan dili"),
+    ("en", "English"),
+    ("ja", "日本語"),
+    ("de", "Deutsch"),
+    ("ko", "한국어"),
 ];
 
 pub(crate) fn cjk_ui_unavailable() -> bool {
@@ -203,6 +155,11 @@ pub fn translate_locale(name: String, locale: &str) -> String {
         locale,
         cjk_ui_unavailable(),
     );
+    let lang = if ["fa", "en", "ja", "de", "ko"].contains(&lang.as_str()) {
+        lang
+    } else {
+        "en".to_owned()
+    };
     let m = match lang.as_str() {
         "fr" => fr::T.deref(),
         "zh-cn" => cn::T.deref(),

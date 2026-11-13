@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hbb/common.dart';
+import 'package:flutter_hbb/consts.dart';
+import 'package:flutter_hbb/models/platform_model.dart';
 
 /// Brand header shown at the top of the desktop home screen (left pane).
 class VorixaBrandHeader extends StatelessWidget {
@@ -10,7 +13,8 @@ class VorixaBrandHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color titleColor =
         Theme.of(context).textTheme.titleLarge?.color ?? Colors.black87;
-    return Padding(
+    return Stack(children: [
+      Padding(
       padding: const EdgeInsets.only(top: 22, bottom: 10, left: 16, right: 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -75,6 +79,54 @@ class VorixaBrandHeader extends StatelessWidget {
           ),
         ],
       ),
+      ),
+      const Positioned(top: 4, right: 6, child: VorixaLanguageButton()),
+    ]);
+  }
+}
+
+/// Language switcher (the five supported languages). Works on the install
+/// page and on the home screen; the choice is stored and kept after install.
+class VorixaLanguageButton extends StatelessWidget {
+  const VorixaLanguageButton({Key? key}) : super(key: key);
+
+  static const List<List<String>> _langs = [
+    ['fa', 'فارسی'],
+    ['en', 'English'],
+    ['ja', '日本語'],
+    ['de', 'Deutsch'],
+    ['ko', '한국어'],
+  ];
+
+  Future<void> _setLang(String code) async {
+    await bind.mainSetLocalOption(key: kCommConfKeyLang, value: code);
+    reloadAllWindows();
+    bind.mainChangeLanguage(lang: code);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final String current = bind.mainGetLocalOption(key: kCommConfKeyLang);
+    return PopupMenuButton<String>(
+      tooltip: 'Language',
+      icon: const Icon(Icons.language_rounded, size: 22, color: Color(0xFF2286E2)),
+      onSelected: _setLang,
+      itemBuilder: (BuildContext c) => [
+        for (final l in _langs)
+          PopupMenuItem<String>(
+            value: l[0],
+            child: Row(children: [
+              SizedBox(
+                width: 22,
+                child: current == l[0]
+                    ? const Icon(Icons.check_rounded,
+                        size: 18, color: Color(0xFF2286E2))
+                    : null,
+              ),
+              Text(l[1]),
+            ]),
+          ),
+      ],
     );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hbb/common.dart';
+import 'package:flutter_hbb/common/widgets/vorixa_brand.dart';
 import 'package:flutter_hbb/desktop/widgets/install_directory_confirmation.dart';
 import 'package:flutter_hbb/desktop/widgets/tabbar_widget.dart';
 import 'package:flutter_hbb/models/platform_model.dart';
@@ -163,8 +164,15 @@ class _InstallPageBodyState extends State<_InstallPageBody>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(translate('Installation'),
-                  style: Theme.of(context).textTheme.headlineMedium),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(translate('Installation'),
+                        style: Theme.of(context).textTheme.headlineMedium),
+                  ),
+                  const VorixaLanguageButton(),
+                ],
+              ),
               Table(
                 columnWidths: const {
                   0: IntrinsicColumnWidth(),

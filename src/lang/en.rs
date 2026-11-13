@@ -1,6 +1,8 @@
 lazy_static::lazy_static! {
 pub static ref T: std::collections::HashMap<&'static str, &'static str> =
     [
+        ("VORIXA Remote storage", "VORIXA Remote storage"),
+        ("Keep VORIXA Remote background service", "Keep VORIXA Remote background service"),
         ("desk_tip", "Your desktop can be accessed with this ID and password."),
         ("connecting_status", "Connecting to the VORIXA Remote network..."),
         ("not_ready_status", "Not ready. Please check your connection"),

@@ -472,7 +472,7 @@ class MyTheme {
     useMaterial3: false,
     brightness: Brightness.dark,
     hoverColor: Color.fromARGB(255, 45, 46, 53),
-    scaffoldBackgroundColor: Color(0xFF18191E),
+    scaffoldBackgroundColor: Color(0xFF0F131A),
     dialogBackgroundColor: Color(0xFF18191E),
     appBarTheme: AppBarTheme(
       shadowColor: Colors.transparent,
