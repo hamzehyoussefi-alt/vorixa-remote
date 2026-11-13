@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hbb/common/widgets/vorixa_brand.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hbb/common.dart';
 import 'package:flutter_hbb/common/widgets/animated_rotation_widget.dart';
@@ -80,18 +81,10 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     final isOutgoingOnly = bind.isOutgoingOnly();
     final children = <Widget>[
       if (!isOutgoingOnly) buildPresetPasswordWarning(),
-      if (bind.isCustomClient())
-        Align(
-          alignment: Alignment.center,
-          child: loadPowered(context),
-        ),
-      Align(
-        alignment: Alignment.center,
-        child: loadLogo(),
-      ),
+      const VorixaBrandHeader(),
       buildTip(context),
-      if (!isOutgoingOnly) buildIDBoard(context),
-      if (!isOutgoingOnly) buildPasswordBoard(context),
+      if (!isOutgoingOnly) VorixaPanel(child: buildIDBoard(context)),
+      if (!isOutgoingOnly) VorixaPanel(child: buildPasswordBoard(context)),
       FutureBuilder<Widget>(
         future: Future.value(
             Obx(() => buildHelpCards(stateGlobal.updateUrl.value))),
@@ -129,7 +122,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     return ChangeNotifierProvider.value(
       value: gFFI.serverModel,
       child: Container(
-        width: isIncomingOnly ? 280.0 : 200.0,
+        width: isIncomingOnly ? 280.0 : 280.0,
         color: Theme.of(context).colorScheme.background,
         child: Stack(
           children: [
@@ -188,7 +181,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   buildIDBoard(BuildContext context) {
     final model = gFFI.serverModel;
     return Container(
-      margin: const EdgeInsets.only(left: 20, right: 11),
+      margin: const EdgeInsets.only(left: 8, right: 4),
       height: 57,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -295,7 +288,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     final showOneTime = model.approveMode != 'click' &&
         model.verificationMethod != kUsePermanentPassword;
     return Container(
-      margin: EdgeInsets.only(left: 20.0, right: 16, top: 13, bottom: 13),
+      margin: EdgeInsets.only(left: 8.0, right: 8, top: 8, bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.baseline,
         textBaseline: TextBaseline.alphabetic,
@@ -614,8 +607,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [
-                  Color.fromARGB(255, 226, 66, 188),
-                  Color.fromARGB(255, 244, 114, 124),
+                  Color(0xFF0B3C75),
+                  Color(0xFF2286E2),
                 ],
               )),
               padding: EdgeInsets.all(20),
