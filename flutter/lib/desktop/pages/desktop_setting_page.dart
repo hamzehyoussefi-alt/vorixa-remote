@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hbb/common/widgets/vorixa_credits.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hbb/common.dart';
 import 'package:flutter_hbb/common/widgets/audio_input.dart';
@@ -2595,7 +2596,8 @@ class _AboutState extends State<_About> {
       final scrollController = ScrollController();
       return SingleChildScrollView(
         controller: scrollController,
-        child: _Card(title: translate('About RustDesk'), children: [
+        child: _Card(title: 'About VORIXA Remote', children: [
+          VorixaCreditsCard().marginOnly(left: _kContentHMargin, bottom: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
