@@ -303,5 +303,7 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("vorixa_collab", "Collaborative Control"),
         ("vorixa_reconnect", "Reconnect"),
         ("vorixa_reconnecting", "Looking for the server…"),
+        ("vorixa_connected_warn", "A device is connected to this phone"),
+        ("vorixa_cut", "Cut access"),
     ].iter().cloned().collect();
 }

@@ -171,6 +171,21 @@ class _RemotePageState extends State<RemotePage>
         t.cancel();
       }
     });
+    Timer.periodic(const Duration(seconds: 1), (t) async {
+      if (!mounted || t.tick > 60) {
+        t.cancel();
+        return;
+      }
+      final pi = _ffi.ffiModel.pi;
+      if (pi.version.isNotEmpty && _ffi.ffiModel.waitForFirstImage.isFalse) {
+        t.cancel();
+        if (pi.platform == kPeerPlatformAndroid) {
+          await bind.sessionSetViewStyle(
+              sessionId: _ffi.sessionId, value: kRemoteViewStyleAdaptive);
+          _ffi.canvasModel.updateViewStyle();
+        }
+      }
+    });
     if (isMacOS) {
       // SchedulerBinding.instance.lifecycleState is null in the first connection in a new window.
       _macOSLifecycleState = SchedulerBinding.instance.lifecycleState;

@@ -837,5 +837,7 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("vorixa_collab", "کنترل دسکتاپ مشارکتی"),
         ("vorixa_reconnect", "اتصال مجدد"),
         ("vorixa_reconnecting", "در حال جستجوی سرور…"),
+        ("vorixa_connected_warn", "یک دستگاه به گوشی شما متصل است"),
+        ("vorixa_cut", "قطع دسترسی"),
     ].iter().cloned().collect();
 }

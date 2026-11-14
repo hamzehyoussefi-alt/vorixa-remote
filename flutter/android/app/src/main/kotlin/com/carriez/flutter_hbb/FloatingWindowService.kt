@@ -358,7 +358,18 @@ class FloatingWindowService : Service(), View.OnTouchListener {
     }
 
     private fun stopMainService() {
-        MainActivity.flutterMethodChannel?.invokeMethod("stop_service", null)
+        val channel = MainActivity.flutterMethodChannel
+        if (channel != null) {
+            channel.invokeMethod("stop_service", null)
+        } else {
+            try {
+                stopService(Intent(this, MainService::class.java))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        // Always remove the floating circle itself.
+        stopSelf()
     }
 
     enum class KeepScreenOn {

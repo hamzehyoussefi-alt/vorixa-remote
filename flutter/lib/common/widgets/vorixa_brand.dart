@@ -741,3 +741,49 @@ class VorixaReconnectButton extends StatelessWidget {
     );
   }
 }
+
+
+/// Red bar shown on the phone while somebody is connected to it.
+class VorixaDisconnectBar extends StatelessWidget {
+  final VoidCallback onCut;
+  const VorixaDisconnectBar({Key? key, required this.onCut}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: const Color(0xFFD32F2F),
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 6, 8, 6),
+          child: Row(
+            children: [
+              const Icon(Icons.link_rounded, color: Colors.white, size: 22),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  translate('vorixa_connected_warn'),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: const Color(0xFFD32F2F),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                ),
+                onPressed: onCut,
+                child: Text(translate('vorixa_cut'),
+                    style: const TextStyle(fontWeight: FontWeight.w800)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -837,5 +837,7 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("vorixa_collab", "공동 제어"),
         ("vorixa_reconnect", "다시 연결"),
         ("vorixa_reconnecting", "서버 검색 중…"),
+        ("vorixa_connected_warn", "이 휴대폰에 연결된 기기가 있습니다"),
+        ("vorixa_cut", "접근 차단"),
     ].iter().cloned().collect();
 }

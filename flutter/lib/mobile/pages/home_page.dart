@@ -4,6 +4,8 @@ import 'package:flutter_hbb/mobile/pages/server_page.dart';
 import 'package:flutter_hbb/mobile/pages/settings_page.dart';
 import 'package:flutter_hbb/web/settings_page.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import '../../models/server_model.dart';
 import '../../common.dart';
 import '../../common/widgets/chat_page.dart';
 import '../../models/platform_model.dart';
@@ -114,7 +116,22 @@ class HomePageState extends State<HomePage> {
               }
             }),
           ),
-          body: _pages.elementAt(_selectedIndex),
+          body: ChangeNotifierProvider.value(
+            value: gFFI.serverModel,
+            child: Consumer<ServerModel>(builder: (context, model, child) {
+              final page = _pages.elementAt(_selectedIndex);
+              if (model.clients.isEmpty) return page;
+              return Column(
+                children: [
+                  VorixaDisconnectBar(onCut: () => model.closeAll()),
+                  Expanded(
+                    child: MediaQuery.removePadding(
+                        context: context, removeTop: true, child: page),
+                  ),
+                ],
+              );
+            }),
+          ),
         )));
   }
 
