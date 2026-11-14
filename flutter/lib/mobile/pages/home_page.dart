@@ -33,6 +33,12 @@ class HomePageState extends State<HomePage> {
       ? _selectedIndex == _chatPageTabIndex
       : false; // change this when ios have chat page
 
+  void goToSettings() {
+    setState(() {
+      _selectedIndex = _pages.length - 1;
+    });
+  }
+
   void refreshPages() {
     setState(() {
       initPages();
@@ -72,14 +78,19 @@ class HomePageState extends State<HomePage> {
           }
           return false;
         },
-        child: Scaffold(
-          // backgroundColor: MyTheme.grayBg,
-          appBar: AppBar(
-            centerTitle: true,
-            title: appTitle(),
-            actions: _pages.elementAt(_selectedIndex).appBarActions,
-          ),
+        child: Theme(
+            data: MyTheme.darkTheme,
+            child: Scaffold(
+          backgroundColor: const Color(0xFF070914),
+          appBar: (_pages.elementAt(_selectedIndex) is ConnectionPage)
+              ? null
+              : AppBar(
+                  centerTitle: true,
+                  title: appTitle(),
+                  actions: _pages.elementAt(_selectedIndex).appBarActions,
+                ),
           bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: const Color(0xFF0A0B10),
             key: navigationBarKey,
             items: _pages
                 .map((page) =>
@@ -87,7 +98,7 @@ class HomePageState extends State<HomePage> {
                 .toList(),
             currentIndex: _selectedIndex,
             type: BottomNavigationBarType.fixed,
-            selectedItemColor: MyTheme.accent, //
+            selectedItemColor: const Color(0xFF8E98FF), //
             unselectedItemColor: MyTheme.darkGray,
             onTap: (index) => setState(() {
               // close chat overlay when go chat page
@@ -103,7 +114,7 @@ class HomePageState extends State<HomePage> {
             }),
           ),
           body: _pages.elementAt(_selectedIndex),
-        ));
+        )));
   }
 
   Widget appTitle() {

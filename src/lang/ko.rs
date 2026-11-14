@@ -828,5 +828,8 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("install-directory-not-empty-tip", "선택한 폴더가 비어 있지 않습니다. 설치 시 기존 데이터가 삭제될 수 있습니다. 다른 폴더를 선택하는 것이 좋습니다."),
         ("Request approval", "승인 요청"),
         ("Forever", "영구"),
+        ("vorixa_your_id", "내 ID"),
+        ("vorixa_enter_id", "원격 ID 입력"),
+        ("vorixa_recent", "최근 연결"),
     ].iter().cloned().collect();
 }

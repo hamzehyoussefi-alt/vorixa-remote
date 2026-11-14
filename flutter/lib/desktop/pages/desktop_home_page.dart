@@ -178,15 +178,17 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   /// then the connect card and the sessions list.
   Widget buildDashboard(BuildContext context) {
     final isOutgoingOnly = bind.isOutgoingOnly();
-    return ChangeNotifierProvider.value(
+    return Theme(
+      data: MyTheme.darkTheme,
+      child: ChangeNotifierProvider.value(
       value: gFFI.serverModel,
       child: Column(
         children: [
-          const VorixaHero(),
+          const VorixaTopBar(),
           Expanded(
-            child: Container(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              child: Column(
+            child: Stack(children: [
+              const Positioned.fill(child: VorixaBackdrop()),
+              Column(
                 children: [
                   if (!isOutgoingOnly) buildPresetPasswordWarning(),
                   if (!isOutgoingOnly)
@@ -206,12 +208,12 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                   Expanded(child: buildRightPane(context)),
                 ],
               ),
-            ),
+            ]),
           ),
           buildBottomBanner(),
         ],
       ),
-    );
+    ));
   }
 
   Widget buildBottomBanner() {

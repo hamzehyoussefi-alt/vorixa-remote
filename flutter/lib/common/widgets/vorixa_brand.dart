@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hbb/common.dart';
 import 'package:flutter_hbb/consts.dart';
 import 'package:flutter_hbb/mobile/pages/home_page.dart';
@@ -150,7 +154,7 @@ class VorixaPanel extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
       decoration: BoxDecoration(
-        color: dark ? const Color(0xFF1B1E24) : const Color(0xFFF3F7FC),
+        color: dark ? const Color(0x14FFFFFF) : const Color(0xFFF3F7FC),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: dark ? Colors.white12 : const Color(0x1F2286E2),
@@ -339,4 +343,297 @@ void vorixaMaybeShowLanguagePicker() {
       actions: const [],
     );
   }, clickMaskDismiss: false, backDismiss: false);
+}
+
+
+class VorixaColors {
+  static const Color bg0 = Color(0xFF070914);
+  static const Color bg1 = Color(0xFF0E1230);
+  static const Color accent = Color(0xFF4E5BFF);
+  static const Color accentLight = Color(0xFF8E98FF);
+  static const Color orange = Color(0xFFFF8A00);
+}
+
+/// Deep navy background with soft blue glows.
+class VorixaBackdrop extends StatelessWidget {
+  const VorixaBackdrop({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [VorixaColors.bg0, VorixaColors.bg1, VorixaColors.bg0],
+        ),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            left: -120,
+            top: 140,
+            child: Container(
+              width: 320,
+              height: 320,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [Color(0x334E5BFF), Color(0x004E5BFF)],
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            right: -140,
+            top: 360,
+            child: Container(
+              width: 360,
+              height: 360,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [Color(0x222286E2), Color(0x002286E2)],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Frosted-glass card with a blue glow.
+class VorixaGlassCard extends StatelessWidget {
+  final Widget child;
+  final EdgeInsets padding;
+  const VorixaGlassCard(
+      {Key? key,
+      required this.child,
+      this.padding = const EdgeInsets.fromLTRB(22, 26, 22, 24)})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(26),
+        boxShadow: const [
+          BoxShadow(
+              color: Color(0x554E5BFF), blurRadius: 40, spreadRadius: 1),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(26),
+        child: BackdropFilter(
+          filter: ui.ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+          child: Container(
+            padding: padding,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(26),
+              color: const Color(0x26FFFFFF),
+              border: Border.all(color: const Color(0x808E98FF), width: 1.2),
+            ),
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Top bar: VORIXA lockup | Powered by Jafam, language + settings buttons.
+class VorixaTopBar extends StatelessWidget {
+  final VoidCallback? onSettings;
+  const VorixaTopBar({Key? key, this.onSettings}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      color: const Color(0xFF0A0B10),
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(18, 10, 8, 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    children: [
+                      Image.asset('assets/vorixa_fox.png',
+                          height: 56, fit: BoxFit.contain),
+                      const SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          Text('VORIXA',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w800,
+                                  height: 1.05,
+                                  letterSpacing: 1)),
+                          Text('REMOTE',
+                              style: TextStyle(
+                                  color: VorixaColors.orange,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  height: 1.2,
+                                  letterSpacing: 6)),
+                        ],
+                      ),
+                      const SizedBox(width: 18),
+                      Container(width: 1, height: 52, color: Colors.white24),
+                      const SizedBox(width: 18),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('Powered by',
+                              style: TextStyle(
+                                  color: Color(0xFFD7DBEA), fontSize: 15)),
+                          const SizedBox(height: 4),
+                          Image.asset('assets/jafam_logo.png',
+                              height: 44, fit: BoxFit.contain),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const VorixaLanguageButton(color: Color(0xFFB8C0D8)),
+              if (onSettings != null)
+                IconButton(
+                  onPressed: onSettings,
+                  icon: const Icon(Icons.settings_outlined,
+                      color: Color(0xFFB8C0D8), size: 24),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Big "Your ID" title with the formatted ID underneath (tap to copy).
+class VorixaMyId extends StatefulWidget {
+  const VorixaMyId({Key? key}) : super(key: key);
+
+  @override
+  State<VorixaMyId> createState() => _VorixaMyIdState();
+}
+
+class _VorixaMyIdState extends State<VorixaMyId> {
+  String _id = '';
+  Timer? _timer;
+
+  Future<void> _load() async {
+    final v = await bind.mainGetMyId();
+    if (mounted && v != _id) setState(() => _id = v);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+    _timer = Timer.periodic(const Duration(seconds: 3), (_) => _load());
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  String get _pretty {
+    final d = _id.replaceAll(' ', '');
+    if (d.isEmpty) return '···  ···  ···';
+    final parts = <String>[];
+    for (var i = 0; i < d.length; i += 3) {
+      parts.add(d.substring(i, i + 3 > d.length ? d.length : i + 3));
+    }
+    return parts.join(' • ');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            translate('vorixa_your_id'),
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 46,
+                fontWeight: FontWeight.w800,
+                letterSpacing: -0.5),
+          ),
+        ),
+        const SizedBox(height: 10),
+        InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: () {
+            if (_id.isNotEmpty) {
+              Clipboard.setData(ClipboardData(text: _id));
+              showToast(translate('Copied'));
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                _pretty,
+                style: const TextStyle(
+                    color: VorixaColors.accentLight,
+                    fontSize: 26,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Pill-shaped primary button with a glow.
+class VorixaConnectButton extends StatelessWidget {
+  final VoidCallback onTap;
+  const VorixaConnectButton({Key? key, required this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 58,
+        width: double.infinity,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(29),
+          gradient: const LinearGradient(
+              colors: [Color(0xFF5B68FF), Color(0xFF4650F0)]),
+          boxShadow: const [
+            BoxShadow(
+                color: Color(0x884E5BFF), blurRadius: 22, offset: Offset(0, 8)),
+          ],
+        ),
+        child: Text(
+          translate('Connect'),
+          style: const TextStyle(
+              color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700),
+        ),
+      ),
+    );
+  }
 }

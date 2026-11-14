@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hbb/common/formatter/id_formatter.dart';
 import 'package:flutter_hbb/common/widgets/connection_page_title.dart';
 import 'package:flutter_hbb/common/widgets/vorixa_brand.dart';
@@ -81,21 +82,57 @@ class _ConnectionPageState extends State<ConnectionPage> {
   @override
   Widget build(BuildContext context) {
     Provider.of<FfiModel>(context);
-    return CustomScrollView(
-      slivers: [
-        SliverList(
-            delegate: SliverChildListDelegate([
-          if (!bind.isCustomClient() && !isIOS)
-            Obx(() => _buildUpdateUI(stateGlobal.updateUrl.value)),
-          const VorixaBrandHeader(),
-          _buildRemoteIDTextField(),
-        ])),
-        SliverFillRemaining(
-          hasScrollBody: true,
-          child: PeerTabPage(),
-        )
+    return Stack(
+      children: [
+        const Positioned.fill(child: VorixaBackdrop()),
+        Column(
+          children: [
+            VorixaTopBar(
+              onSettings: () => HomePage.homeKey.currentState?.goToSettings(),
+            ),
+            Expanded(
+              child: CustomScrollView(
+                slivers: [
+                  SliverList(
+                      delegate: SliverChildListDelegate([
+                    if (!bind.isCustomClient() && !isIOS)
+                      Obx(() => _buildUpdateUI(stateGlobal.updateUrl.value)),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
+                      child: VorixaGlassCard(
+                        child: Column(
+                          children: [
+                            const VorixaMyId(),
+                            const SizedBox(height: 18),
+                            _buildRemoteIDTextField(),
+                            const SizedBox(height: 10),
+                            VorixaConnectButton(onTap: onConnect),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(26, 30, 26, 6),
+                      child: Text(
+                        translate('vorixa_recent'),
+                        style: const TextStyle(
+                            color: Color(0xFFAEB6E8),
+                            fontSize: 17,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ])),
+                  SliverFillRemaining(
+                    hasScrollBody: true,
+                    child: PeerTabPage().marginOnly(left: 10, right: 10),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
       ],
-    ).marginOnly(top: 2, left: 10, right: 10);
+    );
   }
 
   /// Callback for the connect button.
@@ -151,24 +188,16 @@ class _ConnectionPageState extends State<ConnectionPage> {
   /// Search for a peer and connect to it if the id exists.
   Widget _buildRemoteIDTextField() {
     final w = SizedBox(
-      height: 84,
+      height: 66,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
         child: Ink(
           decoration: BoxDecoration(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? const Color(0xFF1B1E24)
-                : Colors.white,
+            color: const Color(0x33000000),
             borderRadius: BorderRadius.all(Radius.circular(18)),
-            border: Border.all(
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.white12
-                    : const Color(0x262286E2)),
+            border: Border.all(color: const Color(0xFF6F7CFF), width: 1.2),
             boxShadow: const [
-              BoxShadow(
-                  color: Color(0x1F2286E2),
-                  blurRadius: 24,
-                  offset: Offset(0, 8))
+              BoxShadow(color: Color(0x334E5BFF), blurRadius: 16)
             ],
           ),
           child: Row(
@@ -236,7 +265,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                       return AutoSizeTextField(
                         controller: fieldTextEditingController,
                         focusNode: fieldFocusNode,
-                        minFontSize: 18,
+                        minFontSize: 14,
                         autocorrect: false,
                         enableSuggestions: false,
                         keyboardType: TextInputType.visiblePassword,
@@ -247,11 +276,11 @@ class _ConnectionPageState extends State<ConnectionPage> {
                         style: const TextStyle(
                           fontFamily: 'WorkSans',
                           fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                          color: MyTheme.idColor,
+                          fontSize: 22,
+                          color: Colors.white,
                         ),
                         decoration: InputDecoration(
-                          labelText: translate('Remote ID'),
+                          hintText: translate('vorixa_enter_id'),
                           // hintText: 'Enter your remote ID',
                           border: InputBorder.none,
                           helperStyle: const TextStyle(
@@ -259,7 +288,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                             fontSize: 16,
                             color: MyTheme.darkGray,
                           ),
-                          labelStyle: const TextStyle(
+                          hintStyle: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                             letterSpacing: 0.2,
@@ -349,12 +378,20 @@ class _ConnectionPageState extends State<ConnectionPage> {
                         icon: Icon(Icons.clear, color: MyTheme.darkGray)),
                   )),
               SizedBox(
-                width: 60,
-                height: 60,
+                width: 56,
+                height: 56,
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_forward,
-                      color: MyTheme.darkGray, size: 45),
-                  onPressed: onConnect,
+                  icon: const Icon(Icons.content_paste_rounded,
+                      color: Color(0xFFB8C0FF), size: 26),
+                  onPressed: () async {
+                    final d = await Clipboard.getData(Clipboard.kTextPlain);
+                    final t = d?.text?.trim() ?? '';
+                    if (t.isNotEmpty) {
+                      setState(() {
+                        _idController.id = t;
+                      });
+                    }
+                  },
                 ),
               ),
             ],
