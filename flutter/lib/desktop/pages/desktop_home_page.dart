@@ -198,10 +198,13 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                              child: VorixaPanel(child: buildIDBoard(context))),
+                              child: Builder(
+                                  builder: (ctx) =>
+                                      VorixaPanel(child: buildIDBoard(ctx)))),
                           Expanded(
-                              child: VorixaPanel(
-                                  child: buildPasswordBoard(context))),
+                              child: Builder(
+                                  builder: (ctx) => VorixaPanel(
+                                      child: buildPasswordBoard(ctx)))),
                         ],
                       ),
                     ),
@@ -268,7 +271,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
 
   buildRightPane(BuildContext context) {
     return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
+      color: Colors.transparent,
       child: ConnectionPage(),
     );
   }
@@ -324,6 +327,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                         readOnly: true,
                         decoration: InputDecoration(
                           border: InputBorder.none,
+                          filled: false,
                           contentPadding: EdgeInsets.only(top: 10, bottom: 10),
                         ),
                         style: TextStyle(
@@ -421,6 +425,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                             readOnly: true,
                             decoration: InputDecoration(
                               border: InputBorder.none,
+                          filled: false,
                               contentPadding:
                                   EdgeInsets.only(top: 14, bottom: 10),
                             ),

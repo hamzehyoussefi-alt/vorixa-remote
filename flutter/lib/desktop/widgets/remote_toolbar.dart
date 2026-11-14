@@ -851,6 +851,7 @@ class _RemoteToolbarState extends State<RemoteToolbar> {
       toolbarItems.add(_VoiceCallMenu(id: widget.id, ffi: widget.ffi));
     }
     if (!isWeb) toolbarItems.add(_RecordMenu());
+    toolbarItems.add(_SwitchSidesMenu(id: widget.id, ffi: widget.ffi));
     toolbarItems.add(_CloseMenu(id: widget.id, ffi: widget.ffi));
     final toolbarBorderRadius = BorderRadius.all(Radius.circular(4.0));
     // innerAxis: how the toolbar icons themselves flow.
@@ -2995,6 +2996,39 @@ class _RecordMenu extends StatelessWidget {
       hoverColor: recordingModel.start
           ? _ToolbarTheme.hoverRedColor
           : _ToolbarTheme.hoverBlueColor,
+    );
+  }
+}
+
+class _SwitchSidesMenu extends StatelessWidget {
+  final String id;
+  final FFI ffi;
+  const _SwitchSidesMenu({Key? key, required this.id, required this.ffi})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: ffi.ffiModel,
+      child: Consumer<FfiModel>(builder: (context, model, child) {
+        final pi = model.pi;
+        final ok = isDesktop &&
+            model.keyboard &&
+            pi.platform != kPeerPlatformAndroid &&
+            versionCmp(pi.version, '1.2.0') >= 0 &&
+            bind.peerGetSessionsCount(id: id, connType: ffi.connType.index) ==
+                1;
+        if (!ok) return const Offstage();
+        return _IconMenuButton(
+          icon: const Icon(Icons.swap_horiz_rounded,
+              color: Colors.white, size: 22),
+          tooltip: 'Switch Sides',
+          onPressed: () =>
+              showConfirmSwitchSidesDialog(ffi.sessionId, id, ffi.dialogManager),
+          color: _ToolbarTheme.blueColor,
+          hoverColor: _ToolbarTheme.hoverBlueColor,
+        );
+      }),
     );
   }
 }

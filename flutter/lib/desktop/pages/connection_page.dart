@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hbb/common/widgets/vorixa_brand.dart';
 import 'package:flutter_hbb/common/widgets/connection_page_title.dart';
 import 'package:flutter_hbb/consts.dart';
 import 'package:flutter_hbb/desktop/widgets/popup_menu.dart';
@@ -41,7 +42,7 @@ class _OnlineStatusWidgetState extends State<OnlineStatusWidget> {
   double? get height => bind.isIncomingOnly() ? null : em * 3;
 
   void onUsePublicServerGuide() {
-    const url = "https://rustdesk.com/pricing";
+    const url = "https://jafam.ir";
     canLaunchUrlString(url).then((can) {
       if (can) {
         launchUrlString(url);
@@ -131,9 +132,8 @@ class _OnlineStatusWidgetState extends State<OnlineStatusWidget> {
             ),
             // stop
             if (!isIncomingOnly) startServiceWidget(),
-            // ready && public
-            // No need to show the guide if is custom client.
-            if (!isIncomingOnly) setupServerWidget(),
+            if (!isIncomingOnly) const Spacer(),
+            if (!isIncomingOnly) const VorixaCreditLink(),
           ],
         );
 
@@ -383,19 +383,11 @@ class _ConnectionPageState extends State<ConnectionPage>
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 22),
       decoration: BoxDecoration(
-          color: Theme.of(context).brightness == Brightness.dark
-              ? const Color(0xFF1B1E24)
-              : Colors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
-          border: Border.all(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white12
-                  : const Color(0x262286E2)),
+          color: const Color(0x26FFFFFF),
+          borderRadius: const BorderRadius.all(Radius.circular(24)),
+          border: Border.all(color: const Color(0x808E98FF), width: 1.2),
           boxShadow: const [
-            BoxShadow(
-                color: Color(0x1F2286E2),
-                blurRadius: 28,
-                offset: Offset(0, 10))
+            BoxShadow(color: Color(0x444E5BFF), blurRadius: 34)
           ]),
       child: Ink(
         child: Column(

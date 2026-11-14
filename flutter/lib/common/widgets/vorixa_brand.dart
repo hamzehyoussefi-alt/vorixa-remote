@@ -7,6 +7,7 @@ import 'package:flutter_hbb/common.dart';
 import 'package:flutter_hbb/consts.dart';
 import 'package:flutter_hbb/mobile/pages/home_page.dart';
 import 'package:flutter_hbb/models/platform_model.dart';
+import 'package:flutter_hbb/common/widgets/vorixa_credits.dart';
 
 /// Brand header shown at the top of the desktop home screen (left pane).
 class VorixaBrandHeader extends StatelessWidget {
@@ -632,6 +633,52 @@ class VorixaConnectButton extends StatelessWidget {
           translate('Connect'),
           style: const TextStyle(
               color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700),
+        ),
+      ),
+    );
+  }
+}
+
+
+/// Footer link "Developed by Hamzeh Youssefi" -> opens creator / sponsor card.
+class VorixaCreditLink extends StatelessWidget {
+  const VorixaCreditLink({Key? key}) : super(key: key);
+
+  void _open() {
+    gFFI.dialogManager.show((setState, close, context) {
+      return CustomAlertDialog(
+        title: const Text('VORIXA Remote'),
+        content: SizedBox(
+          width: 360,
+          child: SingleChildScrollView(child: VorixaCreditsCard()),
+        ),
+        actions: [dialogButton('Close', onPressed: close)],
+        onCancel: close,
+      );
+    }, clickMaskDismiss: true, backDismiss: true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: _open,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.favorite_rounded,
+                size: 14, color: VorixaColors.orange),
+            const SizedBox(width: 6),
+            Text(
+              translate('vorixa_credit'),
+              style: const TextStyle(
+                  color: VorixaColors.accentLight,
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w600),
+            ),
+          ],
         ),
       ),
     );

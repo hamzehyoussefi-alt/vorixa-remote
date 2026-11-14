@@ -297,5 +297,6 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("vorixa_your_id", "Your ID"),
         ("vorixa_enter_id", "Enter Remote ID"),
         ("vorixa_recent", "Recent Connections"),
+        ("vorixa_credit", "Developed by Hamzeh Youssefi"),
     ].iter().cloned().collect();
 }
