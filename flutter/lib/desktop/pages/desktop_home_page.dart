@@ -60,6 +60,9 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   Widget build(BuildContext context) {
     super.build(context);
     final isIncomingOnly = bind.isIncomingOnly();
+    if (!isIncomingOnly) {
+      return _buildBlock(child: buildDashboard(context));
+    }
     return _buildBlock(
         child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,6 +170,96 @@ class _DesktopHomePageState extends State<DesktopHomePage>
               )
           ],
         ),
+      ),
+    );
+  }
+
+  /// Redesigned home: hero banner, ID + password cards side by side,
+  /// then the connect card and the sessions list.
+  Widget buildDashboard(BuildContext context) {
+    final isOutgoingOnly = bind.isOutgoingOnly();
+    return ChangeNotifierProvider.value(
+      value: gFFI.serverModel,
+      child: Column(
+        children: [
+          const VorixaHero(),
+          Expanded(
+            child: Container(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: Column(
+                children: [
+                  if (!isOutgoingOnly) buildPresetPasswordWarning(),
+                  if (!isOutgoingOnly)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(2, 10, 2, 0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                              child: VorixaPanel(child: buildIDBoard(context))),
+                          Expanded(
+                              child: VorixaPanel(
+                                  child: buildPasswordBoard(context))),
+                        ],
+                      ),
+                    ),
+                  Expanded(child: buildRightPane(context)),
+                ],
+              ),
+            ),
+          ),
+          buildBottomBanner(),
+        ],
+      ),
+    );
+  }
+
+  Widget buildBottomBanner() {
+    if (isWindows && !bind.isDisableInstallation() && !bind.mainIsInstalled()) {
+      return buildSlimInstallBar();
+    }
+    return Obx(() => buildHelpCards(stateGlobal.updateUrl.value));
+  }
+
+  Widget buildSlimInstallBar() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [Color(0xFF0B3C75), Color(0xFF2286E2)],
+        ),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.shield_outlined, color: Colors.white, size: 22),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              translate('install_tip'),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                  color: Colors.white, fontSize: 12.5, height: 1.4),
+            ),
+          ),
+          const SizedBox(width: 12),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: const Color(0xFF0B3C75),
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+            ),
+            onPressed: () async {
+              await rustDeskWinManager.closeAllSubWindows();
+              bind.mainGotoInstall();
+            },
+            child: Text(translate('Install'),
+                style: const TextStyle(fontWeight: FontWeight.w700)),
+          ),
+        ],
       ),
     );
   }
@@ -694,6 +787,9 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) vorixaMaybeShowLanguagePicker();
+    });
     _updateTimer = periodic_immediate(const Duration(seconds: 1), () async {
       await gFFI.serverModel.fetchID();
       final error = await bind.mainGetError();
