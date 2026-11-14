@@ -60,68 +60,40 @@ class VorixaCreditsCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          // 2) Creator hero
+          // 2) Creator: photo, then the name UNDER the photo
           ClipRRect(
             borderRadius: BorderRadius.circular(14),
             child: AspectRatio(
               aspectRatio: 1.6,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.asset(
-                    'assets/vorixa_creator.jpg',
-                    fit: BoxFit.cover,
-                    alignment: Alignment.topCenter,
-                  ),
-                  const Positioned.fill(
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [Color(0x00000000), Color(0xC7000000)],
-                          stops: [0.45, 1.0],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 16,
-                    right: 16,
-                    bottom: 12,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'Hamzeh Youssefi',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          'حمزه یوسفی',
-                          textDirection: TextDirection.rtl,
-                          style: TextStyle(color: Colors.white, fontSize: 15),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          'Developer & Customizer',
-                          style: TextStyle(
-                            color: _orange,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.6,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              child: Image.asset(
+                'assets/vorixa_creator.jpg',
+                fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
               ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Hamzeh Youssefi',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: textColor, fontSize: 20, fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            'حمزه یوسفی',
+            textDirection: TextDirection.rtl,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: textColor, fontSize: 16),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Developer & Customizer',
+            style: TextStyle(
+              color: _orange,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.6,
             ),
           ),
           const SizedBox(height: 16),
@@ -164,12 +136,12 @@ class VorixaCreditsCard extends StatelessWidget {
           const Divider(height: 20),
           // 4) Open-source notice (AGPL-3.0)
           Text(
-            'Built on the open-source RustDesk project (AGPL-3.0).',
+            'Open-source software · AGPL-3.0',
             textAlign: TextAlign.center,
             style: TextStyle(color: subColor, fontSize: 12, height: 1.5),
           ),
           Text(
-            'این برنامه بر پایه پروژه متن‌باز RustDesk ساخته شده است.',
+            'نرم‌افزار متن‌باز · مجوز AGPL-3.0',
             textDirection: TextDirection.rtl,
             textAlign: TextAlign.center,
             style: TextStyle(color: subColor, fontSize: 12, height: 1.6),

@@ -79,7 +79,7 @@ class HomePageState extends State<HomePage> {
           return false;
         },
         child: Theme(
-            data: MyTheme.darkTheme,
+            data: vorixaThemed(MyTheme.darkTheme),
             child: Scaffold(
           backgroundColor: const Color(0xFF070914),
           appBar: (_pages.elementAt(_selectedIndex) is ConnectionPage)

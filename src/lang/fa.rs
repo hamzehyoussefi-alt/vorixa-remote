@@ -831,6 +831,8 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("vorixa_your_id", "شناسه شما"),
         ("vorixa_enter_id", "شناسه راه دور را وارد کنید"),
         ("vorixa_recent", "اتصال‌های اخیر"),
-        ("vorixa_credit", "طراحی و توسعه: حمزه یوسفی"),
+        ("vorixa_credit", "درباره برنامه"),
+        ("vorixa_use_proxy", "استفاده از پروکسی"),
+        ("vorixa_quit", "خروج کامل از برنامه"),
     ].iter().cloned().collect();
 }

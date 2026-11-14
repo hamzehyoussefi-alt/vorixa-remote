@@ -1933,6 +1933,8 @@ class _NetworkState extends State<_Network> with AutomaticKeepAliveClientMixin {
                   onTap: () => showServerSettings(gFFI.dialogManager, setState),
                 ),
               if (!hideProxy && !hideServer) divider,
+              if (!hideProxy) const VorixaProxySwitch(),
+              if (!hideProxy) divider,
               if (!hideProxy)
                 listTile(
                   icon: Icons.network_ping_outlined,
@@ -3397,3 +3399,69 @@ void changeSocks5Proxy() async {
 }
 
 //#endregion
+
+
+/// One-tap proxy on/off. Turning it off remembers the proxy settings so that
+/// turning it on again restores them without retyping.
+class VorixaProxySwitch extends StatefulWidget {
+  const VorixaProxySwitch({Key? key}) : super(key: key);
+
+  @override
+  State<VorixaProxySwitch> createState() => _VorixaProxySwitchState();
+}
+
+class _VorixaProxySwitchState extends State<VorixaProxySwitch> {
+  static const String _savedKey = 'vorixa-proxy-saved';
+  bool _on = false;
+  Timer? _timer;
+
+  Future<void> _load() async {
+    final socks = await bind.mainGetSocks();
+    final on = socks.length == 3 && socks[0].isNotEmpty;
+    if (mounted && on != _on) setState(() => _on = on);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+    _timer = Timer.periodic(const Duration(seconds: 2), (_) => _load());
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _toggle(bool v) async {
+    if (v) {
+      final saved = bind.mainGetLocalOption(key: _savedKey);
+      final parts = saved.split('\n');
+      if (parts.length == 3 && parts[0].isNotEmpty) {
+        await bind.mainSetSocks(
+            proxy: parts[0], username: parts[1], password: parts[2]);
+        setState(() => _on = true);
+      } else {
+        changeSocks5Proxy();
+      }
+    } else {
+      final socks = await bind.mainGetSocks();
+      if (socks.length == 3 && socks[0].isNotEmpty) {
+        await bind.mainSetLocalOption(key: _savedKey, value: socks.join('\n'));
+      }
+      await bind.mainSetSocks(proxy: '', username: '', password: '');
+      setState(() => _on = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SwitchListTile(
+      secondary: const Icon(Icons.vpn_lock_outlined),
+      title: Text(translate('vorixa_use_proxy')),
+      value: _on,
+      onChanged: _toggle,
+    );
+  }
+}

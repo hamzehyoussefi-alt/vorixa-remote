@@ -179,7 +179,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   Widget buildDashboard(BuildContext context) {
     final isOutgoingOnly = bind.isOutgoingOnly();
     return Theme(
-      data: MyTheme.darkTheme,
+      data: vorixaThemed(MyTheme.darkTheme),
       child: ChangeNotifierProvider.value(
       value: gFFI.serverModel,
       child: Column(

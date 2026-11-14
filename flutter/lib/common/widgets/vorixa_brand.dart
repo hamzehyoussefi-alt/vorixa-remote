@@ -668,8 +668,8 @@ class VorixaCreditLink extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.favorite_rounded,
-                size: 14, color: VorixaColors.orange),
+            const Icon(Icons.info_outline_rounded,
+                size: 15, color: VorixaColors.orange),
             const SizedBox(width: 6),
             Text(
               translate('vorixa_credit'),
@@ -683,4 +683,18 @@ class VorixaCreditLink extends StatelessWidget {
       ),
     );
   }
+}
+
+
+/// Applies the bundled Persian font (B Mitra) when the UI language is Persian.
+ThemeData vorixaThemed(ThemeData t) {
+  var lang = bind.mainGetLocalOption(key: kCommConfKeyLang);
+  if (lang.isEmpty) {
+    lang = ui.PlatformDispatcher.instance.locale.languageCode;
+  }
+  if (!lang.startsWith('fa')) return t;
+  return t.copyWith(
+    textTheme: t.textTheme.apply(fontFamily: 'BMitra'),
+    primaryTextTheme: t.primaryTextTheme.apply(fontFamily: 'BMitra'),
+  );
 }

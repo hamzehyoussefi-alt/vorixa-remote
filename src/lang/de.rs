@@ -831,6 +831,8 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("vorixa_your_id", "Ihre ID"),
         ("vorixa_enter_id", "Remote-ID eingeben"),
         ("vorixa_recent", "Letzte Verbindungen"),
-        ("vorixa_credit", "Entwickelt von Hamzeh Youssefi"),
+        ("vorixa_credit", "Über die App"),
+        ("vorixa_use_proxy", "Proxy verwenden"),
+        ("vorixa_quit", "Vollständig beenden"),
     ].iter().cloned().collect();
 }
