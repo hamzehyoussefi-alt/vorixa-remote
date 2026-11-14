@@ -29,7 +29,7 @@ class VorixaCreditsCard extends StatelessWidget {
     final Color subColor = dark ? Colors.white70 : Colors.black54;
     final TextStyle linkStyle = const TextStyle(
       color: _blue,
-      fontSize: 13,
+      fontSize: 15,
       decoration: TextDecoration.underline,
     );
 
@@ -91,7 +91,7 @@ class VorixaCreditsCard extends StatelessWidget {
             'Developer & Customizer',
             style: TextStyle(
               color: _orange,
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: FontWeight.w600,
               letterSpacing: 0.6,
             ),
@@ -104,9 +104,9 @@ class VorixaCreditsCard extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: _orange,
-              fontSize: 15,
+              fontSize: 17,
               fontWeight: FontWeight.w700,
-              height: 1.6,
+              height: 1.7,
             ),
           ),
           const SizedBox(height: 8),
@@ -114,20 +114,20 @@ class VorixaCreditsCard extends StatelessWidget {
             'VORIXA Remote، ابزار ارتباطی و کنترل از راه دور برند VORIXA است و بخشی از اکوسیستم نرم‌افزاری سامانه سلامت جافام (jafam.ir) به شمار می‌رود. ما با تکیه بر فناوری روز و زیرساخت پایدار جافام، اتصال از راه دور را سریع و امن در اختیار شما می‌گذاریم.',
             textDirection: TextDirection.rtl,
             textAlign: TextAlign.center,
-            style: TextStyle(color: subColor, fontSize: 13, height: 1.8),
+            style: TextStyle(color: subColor, fontSize: 15.5, height: 1.9),
           ),
           const SizedBox(height: 8),
           Text(
             'A VORIXA product, part of the Jafam software ecosystem.',
             textAlign: TextAlign.center,
-            style: TextStyle(color: subColor, fontSize: 12, height: 1.5),
+            style: TextStyle(color: subColor, fontSize: 14, height: 1.6),
           ),
           const SizedBox(height: 10),
           Text(
             'by Jafam',
             style: TextStyle(
               color: textColor,
-              fontSize: 14,
+              fontSize: 16,
               fontWeight: FontWeight.w600,
               letterSpacing: 1.2,
             ),

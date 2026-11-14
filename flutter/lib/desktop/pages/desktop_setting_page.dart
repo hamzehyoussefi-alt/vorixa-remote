@@ -3404,7 +3404,8 @@ void changeSocks5Proxy() async {
 /// One-tap proxy on/off. Turning it off remembers the proxy settings so that
 /// turning it on again restores them without retyping.
 class VorixaProxySwitch extends StatefulWidget {
-  const VorixaProxySwitch({Key? key}) : super(key: key);
+  final bool compact;
+  const VorixaProxySwitch({Key? key, this.compact = false}) : super(key: key);
 
   @override
   State<VorixaProxySwitch> createState() => _VorixaProxySwitchState();
@@ -3457,6 +3458,22 @@ class _VorixaProxySwitchState extends State<VorixaProxySwitch> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.compact) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.vpn_lock_outlined, size: 17),
+          const SizedBox(width: 4),
+          Text(translate('vorixa_use_proxy'),
+              style:
+                  const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+          Transform.scale(
+            scale: 0.75,
+            child: Switch(value: _on, onChanged: _toggle),
+          ),
+        ],
+      );
+    }
     return SwitchListTile(
       secondary: const Icon(Icons.vpn_lock_outlined),
       title: Text(translate('vorixa_use_proxy')),

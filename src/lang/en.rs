@@ -301,5 +301,7 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("vorixa_use_proxy", "Use proxy"),
         ("vorixa_quit", "Quit completely"),
         ("vorixa_collab", "Collaborative Control"),
+        ("vorixa_reconnect", "Reconnect"),
+        ("vorixa_reconnecting", "Looking for the server…"),
     ].iter().cloned().collect();
 }

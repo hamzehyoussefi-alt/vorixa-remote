@@ -6,6 +6,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hbb/common/widgets/vorixa_brand.dart';
+import 'package:flutter_hbb/desktop/pages/desktop_setting_page.dart' show VorixaProxySwitch;
 import 'package:flutter_hbb/common/widgets/connection_page_title.dart';
 import 'package:flutter_hbb/consts.dart';
 import 'package:flutter_hbb/desktop/widgets/popup_menu.dart';
@@ -126,13 +127,17 @@ class _OnlineStatusWidgetState extends State<OnlineStatusWidget> {
                         : Color.fromARGB(255, 224, 79, 95)),
               ),
             ).marginSymmetric(horizontal: em),
-            Container(
-              width: isIncomingOnly ? 226 : null,
-              child: _buildConnStatusMsg(),
+            Flexible(
+              child: Container(
+                width: isIncomingOnly ? 226 : null,
+                child: _buildConnStatusMsg(),
+              ),
             ),
+            if (!isIncomingOnly) const VorixaReconnectButton(),
             // stop
             if (!isIncomingOnly) startServiceWidget(),
             if (!isIncomingOnly) const Spacer(),
+            if (!isIncomingOnly) const VorixaProxySwitch(compact: true),
             if (!isIncomingOnly) const VorixaCreditLink(),
           ],
         );

@@ -699,3 +699,45 @@ ThemeData vorixaThemed(ThemeData t) {
     primaryTextTheme: t.primaryTextTheme.apply(fontFamily: 'BMitra'),
   );
 }
+
+
+/// "Reconnect": makes the background service look for the server again.
+class VorixaReconnectButton extends StatelessWidget {
+  const VorixaReconnectButton({Key? key}) : super(key: key);
+
+  Future<void> _go() async {
+    final s = await bind.mainGetSocks();
+    final ok = s.length == 3;
+    await bind.mainSetSocks(
+        proxy: ok ? s[0] : '',
+        username: ok ? s[1] : '',
+        password: ok ? s[2] : '');
+    showToast(translate('vorixa_reconnecting'));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: _go,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.refresh_rounded,
+                size: 17, color: VorixaColors.accentLight),
+            const SizedBox(width: 4),
+            Text(
+              translate('vorixa_reconnect'),
+              style: const TextStyle(
+                  color: VorixaColors.accentLight,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
