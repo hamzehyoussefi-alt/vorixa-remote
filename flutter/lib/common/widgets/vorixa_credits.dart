@@ -133,20 +133,6 @@ class VorixaCreditsCard extends StatelessWidget {
             ),
           ),
           _link('jafam.ir', 'https://jafam.ir', linkStyle),
-          const Divider(height: 20),
-          // 4) Open-source notice (AGPL-3.0)
-          Text(
-            'Open-source software · AGPL-3.0',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: subColor, fontSize: 12, height: 1.5),
-          ),
-          Text(
-            'نرم‌افزار متن‌باز · مجوز AGPL-3.0',
-            textDirection: TextDirection.rtl,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: subColor, fontSize: 12, height: 1.6),
-          ),
-          _link('Source code', _sourceUrl, linkStyle),
         ],
       ),
     );

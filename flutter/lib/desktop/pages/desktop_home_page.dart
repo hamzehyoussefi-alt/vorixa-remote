@@ -180,6 +180,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     final isOutgoingOnly = bind.isOutgoingOnly();
     return Theme(
       data: vorixaThemed(MyTheme.darkTheme),
+      child: Material(
+      type: MaterialType.transparency,
       child: ChangeNotifierProvider.value(
       value: gFFI.serverModel,
       child: Column(
@@ -198,13 +200,17 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                              child: Builder(
-                                  builder: (ctx) =>
-                                      VorixaPanel(child: buildIDBoard(ctx)))),
+                              child: SizedBox(
+                                  height: 92,
+                                  child: Builder(
+                                      builder: (ctx) => VorixaPanel(
+                                          child: buildIDBoard(ctx))))),
                           Expanded(
-                              child: Builder(
-                                  builder: (ctx) => VorixaPanel(
-                                      child: buildPasswordBoard(ctx)))),
+                              child: SizedBox(
+                                  height: 92,
+                                  child: Builder(
+                                      builder: (ctx) => VorixaPanel(
+                                          child: buildPasswordBoard(ctx))))),
                         ],
                       ),
                     ),
@@ -216,7 +222,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           buildBottomBanner(),
         ],
       ),
-    ));
+    )));
   }
 
   Widget buildBottomBanner() {

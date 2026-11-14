@@ -151,6 +151,26 @@ class _RemotePageState extends State<RemotePage>
   void initState() {
     super.initState();
     _ffi = FFI(widget.sessionId);
+    Timer.periodic(const Duration(seconds: 1), (t) {
+      if (!mounted) {
+        t.cancel();
+        return;
+      }
+      final want = bind.mainGetLocalOption(key: 'vorixa-mutual');
+      if (want.isEmpty || want != widget.id.replaceAll(' ', '')) {
+        if (t.tick > 3) t.cancel();
+        return;
+      }
+      if (_ffi.ffiModel.pi.version.isNotEmpty &&
+          _ffi.ffiModel.keyboard &&
+          _ffi.ffiModel.waitForFirstImage.isFalse) {
+        t.cancel();
+        bind.mainSetLocalOption(key: 'vorixa-mutual', value: '');
+        bind.sessionSwitchSides(sessionId: _ffi.sessionId);
+      } else if (t.tick > 180) {
+        t.cancel();
+      }
+    });
     if (isMacOS) {
       // SchedulerBinding.instance.lifecycleState is null in the first connection in a new window.
       _macOSLifecycleState = SchedulerBinding.instance.lifecycleState;
@@ -760,6 +780,11 @@ class _RemotePageState extends State<RemotePage>
                   },
                   inputModel: _ffi.inputModel,
                   child: getBodyForDesktop(context))),
+          Positioned(
+            right: 20,
+            bottom: 20,
+            child: _VorixaSwitchFab(id: widget.id, ffi: _ffi),
+          ),
           Stack(
             children: [
               _ffi.ffiModel.pi.isSet.isTrue &&
@@ -1511,6 +1536,58 @@ class CursorPaint extends StatelessWidget {
         y: y,
         scale: scale,
       ),
+    );
+  }
+}
+
+
+/// Always-visible "Switch Sides" button inside the remote window.
+class _VorixaSwitchFab extends StatelessWidget {
+  final String id;
+  final FFI ffi;
+  const _VorixaSwitchFab({Key? key, required this.id, required this.ffi})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: ffi.ffiModel,
+      child: Consumer<FfiModel>(builder: (context, model, child) {
+        final pi = model.pi;
+        final ok = model.keyboard &&
+            pi.platform != kPeerPlatformAndroid &&
+            pi.version.isNotEmpty &&
+            versionCmp(pi.version, '1.2.0') >= 0 &&
+            bind.peerGetSessionsCount(id: id, connType: ffi.connType.index) ==
+                1;
+        if (!ok) return const Offstage();
+        return Material(
+          color: const Color(0xFF4E5BFF),
+          elevation: 6,
+          shape: const StadiumBorder(),
+          child: InkWell(
+            customBorder: const StadiumBorder(),
+            onTap: () => showConfirmSwitchSidesDialog(
+                ffi.sessionId, id, ffi.dialogManager),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.swap_horiz_rounded,
+                      color: Colors.white, size: 20),
+                  const SizedBox(width: 6),
+                  Text(translate('Switch Sides'),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600)),
+                ],
+              ),
+            ),
+          ),
+        );
+      }),
     );
   }
 }
