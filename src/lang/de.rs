@@ -839,5 +839,6 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("vorixa_reconnecting", "Server wird gesucht…"),
         ("vorixa_connected_warn", "Ein Gerät ist mit diesem Telefon verbunden"),
         ("vorixa_cut", "Zugriff trennen"),
+        ("vorixa_switch_not_ready", "Zum Seitenwechsel muss auch Ihre eigene App verbunden und „Bereit“ sein. Tippen Sie unten auf dem Startbildschirm auf „Neu verbinden“ und stellen Sie sicher, dass die App installiert ist."),
     ].iter().cloned().collect();
 }

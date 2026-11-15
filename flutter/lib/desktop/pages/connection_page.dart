@@ -292,58 +292,6 @@ class _ConnectionPageState extends State<ConnectionPage>
     bind.mainOnMainWindowClose();
   }
 
-  final TextEditingController _collabController = TextEditingController();
-
-  /// Connect, and as soon as the session is ready ask the other side to
-  /// connect back to us as well (handled in remote_page.dart).
-  void _onCollabConnect() async {
-    final id = _collabController.text.replaceAll(' ', '').trim();
-    if (id.isEmpty) return;
-    await bind.mainSetLocalOption(key: 'vorixa-mutual', value: id);
-    connect(context, id);
-  }
-
-  Widget _buildCollabCard(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      constraints: const BoxConstraints(minHeight: 170),
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 22),
-      decoration: BoxDecoration(
-          color: const Color(0x26FFFFFF),
-          borderRadius: const BorderRadius.all(Radius.circular(24)),
-          border: Border.all(color: const Color(0x808E98FF), width: 1.2),
-          boxShadow: const [
-            BoxShadow(color: Color(0x444E5BFF), blurRadius: 34)
-          ]),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            translate('vorixa_collab'),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 14),
-          TextField(
-            controller: _collabController,
-            onSubmitted: (_) => _onCollabConnect(),
-            decoration: InputDecoration(
-              hintText: translate('vorixa_enter_id'),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-            ),
-          ),
-          const SizedBox(height: 12),
-          ElevatedButton(
-            onPressed: _onCollabConnect,
-            child: Text(translate('Connect')),
-          ),
-        ],
-      ),
-    );
-  }
-
   void onFocusChanged() {
     _idInputFocused.value = _idFocusNode.hasFocus;
     if (_idFocusNode.hasFocus) {
@@ -367,18 +315,11 @@ class _ConnectionPageState extends State<ConnectionPage>
             child: Column(
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                    flex: 2,
+                Flexible(
                     child: Padding(
                         padding: const EdgeInsets.only(right: 12),
                         child: _buildRemoteIDTextField(context))),
-                Expanded(
-                    flex: 1,
-                    child: Padding(
-                        padding: const EdgeInsets.only(right: 12),
-                        child: _buildCollabCard(context))),
               ],
             ).marginOnly(top: 22),
             SizedBox(height: 12),
@@ -433,7 +374,6 @@ class _ConnectionPageState extends State<ConnectionPage>
       entries: [
         action('Connect'),
         action('Transfer file', isFileTransfer: true),
-        action('View camera', isViewCamera: true),
         action('${translate('Terminal')} (beta)', isTerminal: true),
         if (isDesktop) action('TCP tunneling', isTcpTunneling: true),
       ],
@@ -665,10 +605,6 @@ class _ConnectionPageState extends State<ConnectionPage>
                                     (
                                       'Transfer file',
                                       () => onConnect(isFileTransfer: true)
-                                    ),
-                                    (
-                                      'View camera',
-                                      () => onConnect(isViewCamera: true)
                                     ),
                                     (
                                       '${translate('Terminal')} (beta)',

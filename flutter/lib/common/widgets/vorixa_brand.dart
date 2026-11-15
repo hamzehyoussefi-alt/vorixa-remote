@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io' show Process;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -7,6 +9,8 @@ import 'package:flutter_hbb/common.dart';
 import 'package:flutter_hbb/consts.dart';
 import 'package:flutter_hbb/mobile/pages/home_page.dart';
 import 'package:flutter_hbb/models/platform_model.dart';
+import 'package:flutter_hbb/models/model.dart';
+import 'package:flutter_hbb/common/widgets/dialog.dart';
 import 'package:flutter_hbb/common/widgets/vorixa_credits.dart';
 
 /// Brand header shown at the top of the desktop home screen (left pane).
@@ -706,6 +710,7 @@ class VorixaReconnectButton extends StatelessWidget {
   const VorixaReconnectButton({Key? key}) : super(key: key);
 
   Future<void> _go() async {
+    await vorixaAutoProxy();
     final s = await bind.mainGetSocks();
     final ok = s.length == 3;
     await bind.mainSetSocks(
@@ -786,4 +791,89 @@ class VorixaDisconnectBar extends StatelessWidget {
       ),
     );
   }
+}
+
+
+/// Switch sides, but first make sure THIS app is connected to the server:
+/// the other side connects back to us through it.
+Future<void> vorixaSwitchSides(FFI ffi, String id) async {
+  var ready = false;
+  try {
+    final st = jsonDecode(await bind.mainGetConnectStatus())
+        as Map<String, dynamic>;
+    ready = (st['status_num'] as int?) == 1;
+  } catch (_) {}
+  if (!ready) {
+    ffi.dialogManager.show((setState, close, context) {
+      return CustomAlertDialog(
+        title: Text(translate('Prompt')),
+        content: Text(translate('vorixa_switch_not_ready'),
+            style: const TextStyle(height: 1.7)),
+        actions: [dialogButton('OK', onPressed: close)],
+        onCancel: close,
+      );
+    }, clickMaskDismiss: true, backDismiss: true);
+    return;
+  }
+  showConfirmSwitchSidesDialog(ffi.sessionId, id, ffi.dialogManager);
+}
+
+/// Reads the Windows system proxy (the one VPN / proxy tools set).
+Future<String?> vorixaSystemProxy() async {
+  if (!isWindows) return null;
+  try {
+    const key =
+        r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings';
+    final en = await Process.run('reg', ['query', key, '/v', 'ProxyEnable']);
+    if (!RegExp(r'ProxyEnable\s+REG_DWORD\s+0x1\b')
+        .hasMatch(en.stdout.toString())) {
+      return null;
+    }
+    final sv = await Process.run('reg', ['query', key, '/v', 'ProxyServer']);
+    final m = RegExp(r'ProxyServer\s+REG_SZ\s+(.+)')
+        .firstMatch(sv.stdout.toString());
+    if (m == null) return null;
+    final v = m.group(1)!.trim();
+    if (v.isEmpty) return null;
+    if (v.contains('=')) {
+      final map = <String, String>{};
+      for (final part in v.split(';')) {
+        final kv = part.split('=');
+        if (kv.length == 2) map[kv[0].trim().toLowerCase()] = kv[1].trim();
+      }
+      if (map['socks'] != null) return 'socks5://${map['socks']}';
+      final h = map['https'] ?? map['http'];
+      return h == null ? null : 'http://$h';
+    }
+    return v.contains('://') ? v : 'http://$v';
+  } catch (_) {
+    return null;
+  }
+}
+
+/// Follows the computer's proxy automatically, until the user chooses
+/// something themselves (home-screen switch or Settings > Network).
+Future<void> vorixaAutoProxy() async {
+  if (!isWindows) return;
+  if (bind.mainGetLocalOption(key: 'vorixa-proxy-user') == 'Y') return;
+  final sys = await vorixaSystemProxy();
+  final cur = await bind.mainGetSocks();
+  final curProxy = cur.length == 3 ? cur[0] : '';
+  final wasAuto = bind.mainGetLocalOption(key: 'vorixa-proxy-auto') == 'Y';
+  if (sys != null) {
+    if (curProxy != sys) {
+      await bind.mainSetSocks(proxy: sys, username: '', password: '');
+    }
+    await bind.mainSetLocalOption(key: 'vorixa-proxy-auto', value: 'Y');
+  } else if (wasAuto) {
+    await bind.mainSetSocks(proxy: '', username: '', password: '');
+    await bind.mainSetLocalOption(key: 'vorixa-proxy-auto', value: '');
+  }
+}
+
+/// One-time defaults: no audio transfer.
+void vorixaApplyDefaults() {
+  if (bind.mainGetLocalOption(key: 'vorixa-defaults-v1') == 'Y') return;
+  bind.mainSetOption(key: kOptionEnableAudio, value: 'N');
+  bind.mainSetLocalOption(key: 'vorixa-defaults-v1', value: 'Y');
 }

@@ -839,5 +839,6 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("vorixa_reconnecting", "서버 검색 중…"),
         ("vorixa_connected_warn", "이 휴대폰에 연결된 기기가 있습니다"),
         ("vorixa_cut", "접근 차단"),
+        ("vorixa_switch_not_ready", "역할을 바꾸려면 내 앱도 서버에 연결되어 "준비됨" 상태여야 합니다. 홈 화면 아래의 "다시 연결"을 누르고 앱이 설치되어 있는지 확인하세요."),
     ].iter().cloned().collect();
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hbb/common/widgets/vorixa_brand.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
@@ -151,26 +152,6 @@ class _RemotePageState extends State<RemotePage>
   void initState() {
     super.initState();
     _ffi = FFI(widget.sessionId);
-    Timer.periodic(const Duration(seconds: 1), (t) {
-      if (!mounted) {
-        t.cancel();
-        return;
-      }
-      final want = bind.mainGetLocalOption(key: 'vorixa-mutual');
-      if (want.isEmpty || want != widget.id.replaceAll(' ', '')) {
-        if (t.tick > 3) t.cancel();
-        return;
-      }
-      if (_ffi.ffiModel.pi.version.isNotEmpty &&
-          _ffi.ffiModel.keyboard &&
-          _ffi.ffiModel.waitForFirstImage.isFalse) {
-        t.cancel();
-        bind.mainSetLocalOption(key: 'vorixa-mutual', value: '');
-        bind.sessionSwitchSides(sessionId: _ffi.sessionId);
-      } else if (t.tick > 180) {
-        t.cancel();
-      }
-    });
     Timer.periodic(const Duration(seconds: 1), (t) async {
       if (!mounted || t.tick > 60) {
         t.cancel();
@@ -1582,8 +1563,7 @@ class _VorixaSwitchFab extends StatelessWidget {
           shape: const StadiumBorder(),
           child: InkWell(
             customBorder: const StadiumBorder(),
-            onTap: () => showConfirmSwitchSidesDialog(
-                ffi.sessionId, id, ffi.dialogManager),
+            onTap: () => vorixaSwitchSides(ffi, id),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               child: Row(

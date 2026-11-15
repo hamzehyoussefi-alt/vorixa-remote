@@ -420,8 +420,6 @@ class _GeneralState extends State<_General> {
         theme(),
         _Card(title: 'Language', children: [language()]),
         if (!isWeb) hwcodec(),
-        if (!isWeb) audio(context),
-        if (!isWeb) record(context),
         if (!isWeb) WaylandCard(),
         other(),
         if (!bind.isIncomingOnly()) keyboardShortcuts(),
@@ -3282,6 +3280,7 @@ void changeSocks5Proxy() async {
       }
       await bind.mainSetSocks(
           proxy: proxy, username: username, password: password);
+      await bind.mainSetLocalOption(key: 'vorixa-proxy-user', value: 'Y');
       close();
     }
 
@@ -3436,6 +3435,7 @@ class _VorixaProxySwitchState extends State<VorixaProxySwitch> {
   }
 
   Future<void> _toggle(bool v) async {
+    await bind.mainSetLocalOption(key: 'vorixa-proxy-user', value: 'Y');
     if (v) {
       final saved = bind.mainGetLocalOption(key: _savedKey);
       final parts = saved.split('\n');

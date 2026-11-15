@@ -801,7 +801,11 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) vorixaMaybeShowLanguagePicker();
+      if (mounted) {
+        vorixaMaybeShowLanguagePicker();
+        vorixaApplyDefaults();
+        vorixaAutoProxy();
+      }
     });
     _updateTimer = periodic_immediate(const Duration(seconds: 1), () async {
       await gFFI.serverModel.fetchID();

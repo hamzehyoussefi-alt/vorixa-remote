@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hbb/common/widgets/vorixa_brand.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hbb/common/widgets/audio_input.dart';
 import 'package:flutter_hbb/common/widgets/dialog.dart';
@@ -847,10 +848,6 @@ class _RemoteToolbarState extends State<RemoteToolbar> {
       toolbarItems.add(_KeyboardMenu(id: widget.id, ffi: widget.ffi));
     }
     toolbarItems.add(_ChatMenu(id: widget.id, ffi: widget.ffi));
-    if (!isWeb) {
-      toolbarItems.add(_VoiceCallMenu(id: widget.id, ffi: widget.ffi));
-    }
-    if (!isWeb) toolbarItems.add(_RecordMenu());
     toolbarItems.add(_SwitchSidesMenu(id: widget.id, ffi: widget.ffi));
     toolbarItems.add(_CloseMenu(id: widget.id, ffi: widget.ffi));
     final toolbarBorderRadius = BorderRadius.all(Radius.circular(4.0));
@@ -3024,7 +3021,7 @@ class _SwitchSidesMenu extends StatelessWidget {
               color: Colors.white, size: 22),
           tooltip: 'Switch Sides',
           onPressed: () =>
-              showConfirmSwitchSidesDialog(ffi.sessionId, id, ffi.dialogManager),
+              vorixaSwitchSides(ffi, id),
           color: _ToolbarTheme.blueColor,
           hoverColor: _ToolbarTheme.hoverBlueColor,
         );

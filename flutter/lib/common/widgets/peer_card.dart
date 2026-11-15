@@ -578,7 +578,6 @@ abstract class BasePeerCard extends StatelessWidget {
     final List<MenuEntryBase<String>> menuItems = [
       _connectAction(context),
       _transferFileAction(context),
-      _viewCameraAction(context),
       _terminalAction(context),
     ];
 
@@ -665,7 +664,6 @@ abstract class BasePeerCard extends StatelessWidget {
       entries: [
         action('Connect'),
         action('Transfer file', isFileTransfer: true),
-        action('View camera', isViewCamera: true),
         action('Terminal', isTerminal: true),
         if (peer.platform == kPeerPlatformWindows)
           action('Terminal (Run as administrator)', isTerminalRunAsAdmin: true),

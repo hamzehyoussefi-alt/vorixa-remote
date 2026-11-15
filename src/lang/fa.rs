@@ -839,5 +839,6 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("vorixa_reconnecting", "در حال جستجوی سرور…"),
         ("vorixa_connected_warn", "یک دستگاه به گوشی شما متصل است"),
         ("vorixa_cut", "قطع دسترسی"),
+        ("vorixa_switch_not_ready", "برای جابه‌جایی، برنامه شما هم باید به سرور وصل و «آماده به کار» باشد. در پایین صفحه اصلی روی «اتصال مجدد» بزنید و مطمئن شوید برنامه نصب شده است."),
     ].iter().cloned().collect();
 }
