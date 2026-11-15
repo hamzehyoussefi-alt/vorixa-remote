@@ -444,7 +444,7 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Text chat", "텍스트 채팅"),
         ("Stop voice call", "음성 통화 종료"),
         ("relay_hint_tip", "직접 연결이 불가능할 수 있으며 릴레이를 통해 연결을 시도할 수 있습니다. 또한 첫 번째 시도에서 릴레이를 사용하려면 아이디에 \"/r\" 접미사를 추가하거나 최근 세션 카드에 \"항상 릴레이를 통해 연결\" 옵션이 있는 경우 이 옵션을 선택하면 됩니다."),
-        ("Reconnect", "다시 연결"),
+        ("Reconnect", ‘다시 연결’),
         ("Codec", "코덱"),
         ("Resolution", "해상도"),
         ("No transfers in progress", "진행 중인 전송이 없습니다"),
@@ -839,6 +839,6 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("vorixa_reconnecting", "서버 검색 중…"),
         ("vorixa_connected_warn", "이 휴대폰에 연결된 기기가 있습니다"),
         ("vorixa_cut", "접근 차단"),
-        ("vorixa_switch_not_ready", "역할을 바꾸려면 내 앱도 서버에 연결되어 "준비됨" 상태여야 합니다. 홈 화면 아래의 "다시 연결"을 누르고 앱이 설치되어 있는지 확인하세요."),
+        ("vorixa_switch_not_ready", "역할을 바꾸려면 내 앱도 서버에 연결되어 ‘준비됨’ 상태여야 합니다. 홈 화면 아래의 ‘다시 연결’을 누르고 앱이 설치되어 있는지 확인하세요."),
     ].iter().cloned().collect();
 }

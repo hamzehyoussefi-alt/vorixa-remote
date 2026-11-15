@@ -305,6 +305,6 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("vorixa_reconnecting", "Looking for the server…"),
         ("vorixa_connected_warn", "A device is connected to this phone"),
         ("vorixa_cut", "Cut access"),
-        ("vorixa_switch_not_ready", "To switch sides, your own app must also be connected and "Ready". Press Reconnect at the bottom of the home screen and make sure the app is installed."),
+        ("vorixa_switch_not_ready", "To switch sides, your own app must also be connected and “Ready”. Press Reconnect at the bottom of the home screen and make sure the app is installed."),
     ].iter().cloned().collect();
 }
